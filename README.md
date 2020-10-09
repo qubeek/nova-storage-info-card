@@ -57,12 +57,12 @@ protected function cards()
                 [
                     'title' => 'User uploads',
                     'name' => 'video',
-                    'size' => '5 TB'
+                    'space' => '5 TB'
                 ],
                 [
                     'title' => 'Test',
                     'name' => 'test',
-                    'size' => '5 TB'
+                    'space' => '5 TB'
                 ]
             ])
             ->autoplay(false)
