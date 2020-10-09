@@ -11,7 +11,7 @@ Get basic information about storage usage. Be sure, that you use **S3 driver for
 \
 **Note, that you need to add the disk to config/filesystem.php**
 
-![alt text](screenshots/nova-card.png)
+![alt text](screenshots/storage-info-nova-card.png)
 
 ## Installation 
 
@@ -53,17 +53,9 @@ protected function cards()
 {
     return [
         (new NovaStorageInfoCard())
-            ->disks([
-                [
-                    'title' => 'User uploads',
-                    'disk_name' => 'video'
-                ],
-                [
-                    'title' => 'Test',
-                    'disk_name' => 'test'
-                ]
-            ])
-            ->autoplay(false)
+            ->addDisk('Основной диск', 's3', '1 TB')
+            ->addDisk('Дополнительный диск', 's3', '1 TB')
+            ->autoplay(false) // Enable autoplaying for slider
             ->cacheFor(24 * 60 * 60) // Cache for 24 hours
     ];
 }

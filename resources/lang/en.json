@@ -1,5 +1,6 @@
 {
     "novaStorageInfoCard.diskControl": "Disk control",
     "novaStorageInfoCard.refresh": "Refresh",
+    "novaStorageInfoCard.refreshButtonHelpText": "This action will clear the application cache and display the actual data",
     "novaStorageInfoCard.values": "item|items"
 }

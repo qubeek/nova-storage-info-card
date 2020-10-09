@@ -1,5 +1,6 @@
 {
     "novaStorageInfoCard.diskControl": "Контроль дисков",
     "novaStorageInfoCard.refresh": "Обновить",
+    "novaStorageInfoCard.refreshButtonHelpText": "Данное действие очистит кеш приложения и отобразит актуальные данные",
     "novaStorageInfoCard.values": "объект|объекта|объектов"
 }

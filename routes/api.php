@@ -14,6 +14,6 @@ use Qubeek\NovaStorageInfoCard\Http\Controllers\CardController;
 |
 */
 
-Route::post('/stats', CardController::class.'@storage');
-Route::post('/refresh', CardController::class.'@refresh');
-Route::get('/lang', CardController::class.'@lang');
+Route::post('/stats', CardController::class . '@storage');
+Route::post('/refresh', CardController::class . '@refresh');
+Route::get('/lang', CardController::class . '@lang');
