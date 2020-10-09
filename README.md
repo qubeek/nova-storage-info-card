@@ -34,8 +34,8 @@ php artisan vendor:publish --provider="Qubeek\NovaStorageInfoCard\CardServicePro
 Register the card with Nova. To use the package, you need to indicate a disk meta in the format: 
 
 - the name that you used in **config/filesystem.php**
-- title for a table (optional).
-- rename refresh button
+- title for a table
+- total space of a disk
 
 \
 For example:
