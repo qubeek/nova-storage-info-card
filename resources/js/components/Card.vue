@@ -41,7 +41,7 @@
                                 <span class="w-full font-light">{{ disk.bucket }}</span>
                             </div>
                             <div class="flex flex-col">
-                                <span class="w-full font-semibold text-right">{{ disk.size }} <span class="">/ {{ disk.space }}</span></span>
+                                <span class="w-full font-semibold text-right">{{ disk.size }} <span v-if="disk.space">/ {{ disk.space }}</span></span>
                                 <span class="w-full font-light text-right">{{ disk.items }}</span>
                             </div>
                         </div>
