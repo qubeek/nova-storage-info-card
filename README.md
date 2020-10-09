@@ -61,12 +61,6 @@ protected function cards()
 }
 ```
 
-## Tested filesystem types
-
-- [Basic S3 driver](https://laravel.com/docs/7.x/filesystem)
-- [DigitalOcean space](https://www.digitalocean.com/products/spaces/)
-
-
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
