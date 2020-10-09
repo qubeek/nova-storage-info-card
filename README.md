@@ -56,11 +56,13 @@ protected function cards()
             ->disks([
                 [
                     'title' => 'User uploads',
-                    'disk_name' => 'video'
+                    'name' => 'video',
+                    'size' => '5 TB'
                 ],
                 [
                     'title' => 'Test',
-                    'disk_name' => 'test'
+                    'name' => 'test',
+                    'size' => '5 TB'
                 ]
             ])
             ->autoplay(false)
