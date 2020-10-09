@@ -22,13 +22,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Qubeek\\StorageInfoCard\\": "src/"
+            "Qubeek\\NovaStorageInfoCard\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Qubeek\\StorageInfoCard\\CardServiceProvider"
+                "Qubeek\\NovaStorageInfoCard\\CardServiceProvider"
             ]
         }
     }

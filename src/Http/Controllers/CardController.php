@@ -1,10 +1,11 @@
 <?php
 
-namespace Qubeek\StorageInfoCard\Http\Controllers;
+namespace Qubeek\NovaStorageInfoCard\Http\Controllers;
 
-use Aws\ResultPaginator;
 use Aws\S3\S3Client;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -16,7 +17,7 @@ use League\Flysystem\Filesystem;
 class CardController extends Controller
 {
     /**
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function refresh()
     {
@@ -32,7 +33,7 @@ class CardController extends Controller
          * Forget all stored values.
          */
         $disks->each(function ($disk) {
-            Cache::forget($this->getKey($disk['disk_name']));
+            Cache::forget($this->getKey($disk['name']));
         });
 
         return response()->noContent();
@@ -42,7 +43,7 @@ class CardController extends Controller
      * @param int $size
      * @param int $items
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function storage($size = 0, $items = 0)
     {
@@ -62,22 +63,23 @@ class CardController extends Controller
 
             /**
              * Prepare string key for storing cache or request.
-             *
-             * @var string $key
              */
             $key = $this->getKey($data['disk']);
 
-            return Cache::remember($key, 5 * 60, function () use ($items, $bucket, $size, $s3) {
+            $ttl = request('cache', 5 * 60);
+
+            return Cache::remember($key, $ttl, function () use ($items, $bucket, $size, $s3) {
+
                 /**
                  * Fetch list of object from storage.
-                 *
-                 * @var ResultPaginator $results
                  */
                 $results = $s3->getPaginator('ListObjectsV2', [
                     'Bucket' => $bucket,
                 ]);
 
-                /** Serve over results from request */
+                /**
+                 * Serve over results from request
+                 */
                 foreach ($results as $result) {
                     $size += array_sum(array_column($result['Contents'], 'Size'));
                     $items += count(array_values($result['Contents']));
@@ -87,18 +89,17 @@ class CardController extends Controller
                  * Return success status and data for current disk.
                  * Used choice to create interesting and common view for items.
                  */
-
                 return response()->json([
                     'status' => 200,
-                    'size'   => $this->bytesToHuman($size),
+                    'size' => $this->bytesToHuman($size),
                     'bucket' => $bucket,
-                    'items'  => $this->prettyItems($items),
+                    'items' => $this->prettyItems($items),
                 ], 200);
             });
         } else {
             /** Return error, when the disk doesn't provide S3 compatibility */
             return response()->json([
-                'status'  => 400,
+                'status' => 400,
                 'message' => 'The disk doesn\'t provide S3 compatibility',
             ], 400);
         }
@@ -118,7 +119,7 @@ class CardController extends Controller
             $bytes /= 1024;
         }
 
-        return round($bytes, 2).' '.$units[$i];
+        return round($bytes, 2) . ' ' . $units[$i];
     }
 
     /**
@@ -130,7 +131,8 @@ class CardController extends Controller
      */
     protected function prettyItems(int $items)
     {
-        return number_format($items, 0, ',', ' ').' '.Lang::choice('novaStorageInfoCard.values', $items);
+        return number_format($items, 0, ',', ' ') . ' ' .
+            Lang::choice('novaStorageInfoCard.values', $items);
     }
 
     /**
@@ -164,7 +166,7 @@ class CardController extends Controller
      */
     protected function getKey(string $disk)
     {
-        return 'qubeek-nova-storage-info-card-'.$disk;
+        return 'qubeek-nova-storage-info-card-' . $disk;
     }
 
     public function lang()

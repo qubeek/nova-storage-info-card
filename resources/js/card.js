@@ -1,3 +1,3 @@
 Nova.booting((Vue, router, store) => {
-  Vue.component('storage-info-card', require('./components/Card'))
+  Vue.component('nova-storage-info-card', require('./components/Card'))
 })

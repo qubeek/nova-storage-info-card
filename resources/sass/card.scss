@@ -1,4 +1,38 @@
-// Nova Card CSS
-.list-none {
-    list-style: none;
+@import '~tiny-slider/src/tiny-slider';
+
+.tns-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+
+    button {
+        width: 15px;
+        height: 2px;
+        background-color: lightgrey;
+        margin-right: 8px;
+        border-radius: 2px;
+
+        &:focus {
+            outline: none;
+        }
+
+        &.tns-nav-active {
+            background-color: var(--primary);
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+.cursor-grab {
+    cursor: grab;
+}
+
+.disk-item {
+    background: #F6FBFB;
+    border-radius: 12px;
+    padding: 16px;
 }

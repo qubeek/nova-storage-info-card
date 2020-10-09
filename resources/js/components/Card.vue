@@ -1,16 +1,13 @@
 <template>
-    <card class="card relative px-6 py-4 card-panel h-auto">
+    <card class="card relative px-6 py-4 card-panel">
         <loading-view :loading="loading" class="w-full">
-            <div class="flex flex-row justify-between">
+            <div class="flex flex-row justify-between mb-4">
                 <div>
                     <h3 class="mr-3 text-base text-80 font-bold">{{ __('novaStorageInfoCard.diskControl') }}</h3>
-                    <div class="py-2 flex lg:inline-flex">
-                        <span class="flex rounded-full bg-50 uppercase px-2 py-1 text-xs font-bold mr-3">S3</span>
-                        <span v-if="card.size && card.size.length > 0" class="flex rounded-full bg-50 uppercase px-2 py-1 text-xs font-bold mr-3">{{ card.size }}</span>
-                    </div>
                 </div>
                 <div>
-                    <button @click="refresh" class="bg-primary flex flex-row items-center text-white rounded py-2 px-4">
+                    <button @click="refresh"
+                            class="text-primary outline-none focus:outline-none flex flex-row items-center text-white rounded">
                         <span class="mr-2">{{ __('novaStorageInfoCard.refresh') }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
                             <path
@@ -21,29 +18,46 @@
                 </div>
             </div>
 
-            <ol v-if="!initialLoading" class="w-full text-black"
-                :class="disks.length === 1 ? 'list-none pl-0' : 'pl-4'">
-                <li v-for="(disk, i) in disks" :key="i">
-                    <div class="flex flex-row justify-between border-b text-black-50 pb-2 py-3"
-                         :class="disks.length === 1 ? 'border-transparent' : 'border-primary-10%'">
-                        <div class="flex flex-col">
-                            <span class="font-semibold">{{disk.title}}</span>
-                            <span class="w-full font-light">{{ disk.bucket }}</span>
+            <div v-if="!initialLoading" class="w-full text-black">
+                <vue-tiny-slider
+                    :mouse-drag="true"
+                    :loop="true"
+                    :autoplay="card.autoplay"
+                    :autoplayButton="false"
+                    :autoplayButtonOutput="false"
+                    :autoplayTimeout="10000"
+                    :items="sliderItems"
+                    gutter="20"
+                    :controls="false"
+                    :autoplayHoverPause="true"
+                    :dots="true"
+                    navPosition="bottom">
+                    <li v-for="(disk, i) in disks" :key="i">
+                        <div class="disk-item flex flex-row justify-between text-black-50 pb-2 py-6"
+                             :class="{'cursor-grab' : disks.length > 1}">
+                            <div class="flex flex-col">
+                                <span class="font-semibold">{{disk.title}}</span>
+                                <span class="w-full font-light">{{ disk.bucket }}</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="w-full font-semibold text-right">{{ disk.size }} <span class="">/ {{ disk.space }}</span></span>
+                                <span class="w-full font-light text-right">{{ disk.items }}</span>
+                            </div>
                         </div>
-                        <div class="flex flex-col">
-                            <span class="w-full font-semibold text-right">{{ disk.size }}</span>
-                            <span class="w-full font-light text-right">{{ disk.items }}</span>
-                        </div>
-                    </div>
-                </li>
-            </ol>
+                    </li>
+                </vue-tiny-slider>
+
+            </div>
 
         </loading-view>
     </card>
 </template>
 
 <script>
+    import VueTinySlider from 'vue-tiny-slider';
+
     export default {
+        components: {VueTinySlider},
         props: ['card'],
 
 
@@ -58,9 +72,24 @@
             this.load();
         },
 
+        computed: {
+            sliderItems() {
+                switch (this.card.width) {
+                    case '1/2':
+                    case '2/3':
+                    case '3/4':
+                        return 2;
+                    case 'full':
+                        return 3;
+                    default:
+                        return 1;
+                }
+            }
+        },
+
         methods: {
             refresh() {
-                return Nova.request().post('/nova-vendor/storage-info-card/refresh', {
+                return Nova.request().post('/nova-vendor/nova-storage-info-card/refresh', {
                     disks: this.card.disks
                 }).then((res) => {
                     this.load();
@@ -77,22 +106,24 @@
                 /** Load all disks information buckets */
                 Promise.all(
                     this.card.disks.map(d => {
-                        return this.loadStats(d.title, d.disk_name)
+                        return this.loadStats(d, this.card.cacheFor)
                     })
                 ).then(() => {
                     this.loading = false;
                 })
             },
 
-            loadStats(title, disk) {
-                return Nova.request().post('/nova-vendor/storage-info-card/stats', {
-                    disk: disk,
+            loadStats(disk, cache = null) {
+                return Nova.request().post('/nova-vendor/nova-storage-info-card/stats', {
+                    disk: disk.name,
+                    cache: cache
                 }).then((res) => {
                     this.disks.push({
-                        title: title,
+                        title: disk.title,
                         bucket: res.data.bucket,
                         size: res.data.size,
                         items: res.data.items,
+                        space: disk.space
                     });
 
                 });

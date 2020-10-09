@@ -1,6 +1,6 @@
 <?php
 
-namespace Qubeek\StorageInfoCard;
+namespace Qubeek\NovaStorageInfoCard;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
@@ -27,8 +27,8 @@ class CardServiceProvider extends ServiceProvider
         });
 
         Nova::serving(function (ServingNova $event) {
-            Nova::script('storage-info-card', __DIR__.'/../dist/js/card.js');
-            Nova::style('storage-info-card', __DIR__.'/../dist/css/card.css');
+            Nova::script('nova-storage-info-card', __DIR__.'/../dist/js/card.js');
+            Nova::style('nova-storage-info-card', __DIR__.'/../dist/css/card.css');
         });
     }
 
@@ -44,7 +44,7 @@ class CardServiceProvider extends ServiceProvider
         }
 
         Route::middleware(['nova'])
-            ->prefix('nova-vendor/storage-info-card')
+            ->prefix('nova-vendor/nova-storage-info-card')
             ->group(__DIR__.'/../routes/api.php');
     }
 

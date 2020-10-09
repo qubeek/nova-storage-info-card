@@ -4,7 +4,6 @@
 [![Total Downloads](https://poser.pugx.org/qubeek/nova-storage-info-card/downloads)](https://packagist.org/packages/qubeek/nova-storage-info-card)
 [![License](https://poser.pugx.org/qubeek/nova-storage-info-card/license)](https://packagist.org/packages/qubeek/nova-storage-info-card)
 [![composer.lock](https://poser.pugx.org/qubeek/nova-storage-info-card/composerlock)](https://packagist.org/packages/qubeek/nova-storage-info-card)
-[![StyleCI](https://github.styleci.io/repos/262051713/shield?branch=master)](https://github.styleci.io/repos/262051713)
 
 Get basic information about storage usage. Be sure, that you use **S3 driver for disks, that you adding to that card**
 
@@ -27,7 +26,7 @@ composer require qubeek/nova-storage-info-card
 If you want to override localization, you can publish lang files using that command:
 
 ```bash
-php artisan vendor:publish --provider="Qubeek\StorageInfoCard\CardServiceProvider"
+php artisan vendor:publish --provider="Qubeek\NovaStorageInfoCard\CardServiceProvider"
 ```
 
 ## Usage
@@ -56,7 +55,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 protected function cards()
 {
     return [
-        (new StorageInfoCard())
+        (new NovaStorageInfoCard())
             ->disks([
                 [
                     'title' => 'User uploads',
@@ -67,7 +66,8 @@ protected function cards()
                     'disk_name' => 'test'
                 ]
             ])
-            ->memory('5 TB')
+            ->autoplay(false)
+            ->cacheFor(24 * 60 * 60) // Cache for 24 hours
     ];
 }
 ```

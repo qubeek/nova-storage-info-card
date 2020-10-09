@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Qubeek\StorageInfoCard\Http\Controllers\CardController;
+use Qubeek\NovaStorageInfoCard\Http\Controllers\CardController;
 
 /*
 |--------------------------------------------------------------------------
