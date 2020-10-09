@@ -63,7 +63,6 @@ protected function cards()
 
 ## Tested filesystem types
 
-- [Yandex (yandex-object-storage)](https://github.com/fLipE23/yandex-object-storage)
 - [Basic S3 driver](https://laravel.com/docs/7.x/filesystem)
 - [DigitalOcean space](https://www.digitalocean.com/products/spaces/)
 
