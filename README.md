@@ -54,7 +54,7 @@ protected function cards()
     return [
         (new NovaStorageInfoCard())
             ->addDisk('Основной диск', 's3', '1 TB')
-            ->addDisk('Дополнительный диск', 's3', '1 TB')
+            ->addDisk('Дополнительный диск', 's3') // Without disk space 
             ->autoplay(false) // Enable autoplaying for slider
             ->cacheFor(24 * 60 * 60) // Cache for 24 hours
     ];
