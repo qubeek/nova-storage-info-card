@@ -35,10 +35,7 @@ Register the card with Nova. To use the package, you need to indicate a disk met
 
 - the name that you used in **config/filesystem.php**
 - title for a table (optional).
-
-
-\
-In order to display the maximum disk size, write a memory meta which includes the maximum disk size.
+- rename refresh button
 
 \
 For example:
