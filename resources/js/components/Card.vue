@@ -7,6 +7,7 @@
                 </div>
                 <div>
                     <button @click="refresh"
+                            :title="__('novaStorageInfoCard.refreshButtonHelpText')"
                             class="text-primary outline-none focus:outline-none flex flex-row items-center text-white rounded">
                         <span class="mr-2">{{ __('novaStorageInfoCard.refresh') }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
@@ -105,26 +106,26 @@
 
                 /** Load all disks information buckets */
                 Promise.all(
-                    this.card.disks.map(d => {
-                        return this.loadStats(d, this.card.cacheFor)
+                    this.card.disks.map((d, i) => {
+                        return this.loadStats(d, i, this.card.cacheFor)
                     })
                 ).then(() => {
                     this.loading = false;
                 })
             },
 
-            loadStats(disk, cache = null) {
+            loadStats(disk, index, cache = null) {
                 return Nova.request().post('/nova-vendor/nova-storage-info-card/stats', {
                     disk: disk.name,
                     cache: cache
                 }).then((res) => {
-                    this.disks.push({
+                    this.disks[index] = {
                         title: disk.title,
+                        space: disk.space,
                         bucket: res.data.bucket,
                         size: res.data.size,
                         items: res.data.items,
-                        space: disk.space
-                    });
+                    };
 
                 });
             },

@@ -24,16 +24,25 @@ class NovaStorageInfoCard extends Card
     }
 
     /**
-     * Add disks to work with them.
+     *  Add disk to collection.
      *
-     * @param array $disks
-     *
+     * @param string $title
+     * @param string $disk
+     * @param string|null $space
      * @return NovaStorageInfoCard
      */
-    public function disks(array $disks)
+    public function addDisk(string $title, string $disk, string $space = null)
     {
+        $disks = $this->meta['disks'] ?? [];
+
+        array_push($disks, [
+            'title' => $title,
+            'name' => $disk,
+            'space' => $space
+        ]);
+
         return $this->withMeta([
-            'disks' => $disks,
+            'disks' => $disks
         ]);
     }
 
